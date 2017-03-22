@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贪吃蛇</title>
+    <style type="text/css">
+        body {
+            overflow: hidden;
+        }
+        table {
+            position: relative;
+            margin: 0 auto;
+            background-color: #ccc;
+        }
+        td {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        .selected {
+            background-color: blue;
+        }
+        .center {
+            text-align: center;
+        }
+        .hide {
+            display: none;
+        }
+        .green {
+            background-color: #5e5e53;
+        }
+        .red {
+            background-color: red;
+        }
+        button {
+            width: 13rem;
+            height: 6rem;
+            border: 1px solid #ccc;
+            color: #fff;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 34px;
+       }
+       .operation>p>button {
+            width: 8rem;
+            height: 8rem;
+            background-color: #c72020;
+            font-size: 34px;
+        }
+        .margin-left {
+            margin-left: 130px;
+        }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h4>
+            <button class="set-speed red" onclick="setSpeed(this, 200)">简单</button>
+            <button class="set-speed" onclick="setSpeed(this, 100)">困难</button>
+            <button class="set-speed" onclick="setSpeed(this, 20)">光速</button>
+        </h4>
+        <h4>
+            <button class="green" onclick="start()">开始游戏</button>
+            <button class="red" onclick="stop()">暂停</button>
+            <button class="green" onclick="restart()">重新开始</button>
+        </h4>
+        <h2>分数：<span id="score">0</span>分</h2>
+    </div>
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <div class="operation center">
+        <p><button onclick="setDirection('up')">上</button></p>
+        <p><button onclick="setDirection('left')">左</button> <button class="margin-left" onclick="setDirection('right')">右</button></p>
+        <p><button onclick="setDirection('down')">下</button></p>
+    </div>
+    <input type="hidden" id="speed" value="200">
+</body>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+$(function(){
+    init();
+});
+
+// 监控键盘
+$(document).keydown(function(e)  {
+    var _ = window;
+    var currentTime = Date.parse(new Date());
+    if (window.lastTime && (currentTime - window.lastTime <= _.speed)) {
+        return false;
+    }
+    switch(e.which) {
+        case 37:
+            if (_.direction == 'right') {
+                return false;
+            }
+            _.direction = 'left';
+            break;
+        case 38:
+            if (_.direction == 'down') {
+                return false;
+            }
+            _.direction = 'up';
+            break;
+        case 39:
+            if (_.direction == 'left') {
+                return false;
+            }
+            _.direction = 'right';
+            break;
+        case 40:
+            if (_.direction == 'up') {
+                return false;
+            }
+            _.direction = 'down';
+            break;
+        default:
+            break;
+    }
+    window.lastTime = Date.parse(new Date());
+});
+
+var move = function() {
+    var _ = window;
+    var length = _.snake.length;
+    var speed = $('#speed').val();
+    var score = (length - 2) * (2000 / speed);
+    $("#score").html(score);
+    for (var i = length - 1; i >= 0; i--) {
+        var currentIndex = _.snake[i];
+        if (i == length - 1) {
+            switch (_.direction) {
+                case 'right':
+                    var nextIndex = _.snake[i] + 1;
+                    if ((!(nextIndex % 20)) || (-1 != _.snake.indexOf(nextIndex))) {
+                        return failure();
+                    }
+                    break;
+                case 'left':
+                    var nextIndex = _.snake[i] - 1;
+                    if (!((nextIndex + 1) % 20) || (-1 != _.snake.indexOf(nextIndex))) {
+                        return failure();
+                    }
+                    break;
+                case 'up':
+                    var nextIndex = _.snake[i] - 20;
+                    if ((nextIndex < 0) || (-1 != _.snake.indexOf(nextIndex))) {
+                        return failure();
+                    }
+                    break;
+                case 'down':
+                    var nextIndex = _.snake[i] + 20;
+                    if ((nextIndex > 399) || (-1 != _.snake.indexOf(nextIndex))) {
+                        return failure();
+                    }
+                    break;
+                default:
+                    console.log('error');
+                    break;
+            }
+            _.snake[i] = nextIndex;
+            if ($(_.tds).eq(_.snake[i]).hasClass('selected')) {
+                // 下一个刚好被吃了。
+                _.snake.push(_.snake[i]);
+                _.snake[i] = currentIndex;
+                createFood();
+                break;
+            }
+        } else {
+            _.snake[i] = lastTime;
+        }
+
+        $(_.tds).eq(currentIndex).removeClass('selected');
+        $(_.tds).eq(_.snake[i]).addClass('selected');
+        var lastTime = currentIndex;
+    }
+    _.clock = setTimeout('move()', _.speed);
+}
+
+// 失败了failure
+function failure() {
+    clearTimeout(window.clock);
+    var length = window.snake.length;
+    alert('game over');
+    window.end = true;
+    return false;
+}
+
+// 创建食物
+function createFood() {
+    var _ = window;
+    var tmpNum = Math.floor(Math.random() * 400);
+    if (-1 != _.snake.indexOf(tmpNum)) {
+        return createFood();
+    }
+    $(_.tds).eq(tmpNum).addClass('selected');
+}
+
+function init() {
+    var _ = window;
+    _.end = false;
+    _.snake = new Array();
+    _.tds = $('td');
+    _.speed = $('#speed').val();
+    _.snake = [0, 1];
+    $(_.tds).removeClass('selected');
+    $(_.tds).eq(0).addClass('selected');
+    $(_.tds).eq(1).addClass('selected');
+    // 移动方向 right left up down
+    _.direction = 'right';
+    createFood();
+}
+
+function start() {
+    if (window.end) {
+        init();
+    }
+    move();
+}
+function stop() {
+    clearTimeout(window.clock);
+}
+function restart() {
+    stop();
+    init();
+}
+// -----------------------
+function setDirection(name) {
+    var _ = window;
+    var currentTime = Date.parse(new Date());
+    if (window.lastTime && (currentTime - window.lastTime <= (_.speed * 0.5))) {
+        return false;
+    }
+    switch(name) {
+        case 'left':
+            if (_.direction == 'right') {
+                return false;
+            }
+            _.direction = 'left';
+            break;
+        case 'up':
+            if (_.direction == 'down') {
+                return false;
+            }
+            _.direction = 'up';
+            break;
+        case 'right':
+            if (_.direction == 'left') {
+                return false;
+            }
+            _.direction = 'right';
+            break;
+        case 'down':
+            if (_.direction == 'up') {
+                return false;
+            }
+            _.direction = 'down';
+            break;
+        default:
+            break;
+    }
+    window.lastTime = Date.parse(new Date());
+}
+
+function setSpeed(e, speed) {
+    $('.set-speed').removeClass('red');
+    $(e).addClass('red');
+    $('#speed').val(speed);
+    init();
+}
+</script>
+</html>
+
+
